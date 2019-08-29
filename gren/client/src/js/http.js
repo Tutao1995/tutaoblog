@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: Tutao
+ * @Date: 2019-07-19 09:45:35
+ * @LastEditDate: Do not edit
+ */
 import axios from 'axios'
 import store from '../store';
 import * as Cache from './cache.js'
@@ -20,7 +27,6 @@ service.interceptors.request.use(function(config){
 })
 
 service.interceptors.response.use(function(response){
-    console.log(response,"resp")
     let code = response.data.code;
     if(code !== 200){   
         if(code === 501){

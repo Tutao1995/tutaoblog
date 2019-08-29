@@ -1,3 +1,10 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Tutao
+ * @Date: 2019-07-19 09:45:35
+ * @LastEditDate: Do not edit
+ -->
 
 <template>
     <div class="aside" :style="asideStyle">
@@ -8,17 +15,17 @@
       <div class="aside-other">
         <div class="aside-posts">
           <ul>
-            <li class="li-title" @click="goPosts">Posts</li>
+             <li class="li-title" @click="routerChange('home')">Home</li>
           </ul>
         </div>
         <div class="aside-tags">
           <ul>
-            <li class="li-title" @click="goTags">Tags</li>
+            <li class="li-title" @click="routerChange('about')">About</li>
           </ul>
         </div>
         <div class="aside-time">
            <ul>
-            <li class="li-title" @click="goTimes">Times</li>
+             <li class="li-title" @click="routerChange('tags')">Tags</li>
           </ul>
         </div>
       </div>
@@ -64,23 +71,29 @@ export default {
       },
       goTimes(){
         this.$router.push('/tag')
+      },
+      routerChange(val){
+        this.$emit('routerChange',val);
+        this.$router.push('/blog/'+val)
       }
     },
-    created(){
+    mounted(){
         let _THIS = this;
         window.addEventListener('scroll',function(){
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
             if(scrollTop>100){//滚动条的高度，可以动态获取也可以写死
                 _THIS.asideStyle = {
-                "position":"fixed",
-                "top": "30px"
+                  "position":"fixed",
+                  "top": "30px"
                 }
+                _THIS.$emit('handleScroll',false)
             }
             else{
                 _THIS.asideStyle = {
-                "position":"absolute",
-                "top": "230px"
+                  "position":"absolute",
+                  "top": "230px"
                 }
+                _THIS.$emit('handleScroll',true)
             }
         })
     }
@@ -110,6 +123,7 @@ export default {
     height:500px;
     width: 280px;
     background: #fff;
+    transition:all 1s ease;
     box-shadow: 0 0 5px #111;
     .aside-pic{
       img{

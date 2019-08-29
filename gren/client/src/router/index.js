@@ -1,3 +1,10 @@
+/*
+ * @Descripttion: 
+ * @version: 
+ * @Author: Tutao
+ * @Date: 2019-07-19 09:45:35
+ * @LastEditDate: Do not edit
+ */
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/home'

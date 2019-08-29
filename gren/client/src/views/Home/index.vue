@@ -1,7 +1,20 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Tutao
+ * @Date: 2019-07-19 09:45:35
+ * @LastEditDate: Do not edit
+ -->
 <template>
   <div>
-    <Head></Head>
-    <Aside></Aside>
+    <Head 
+      :headShow="scroll" 
+      :activeIndex="activeIndex"  
+    ></Head>
+    <Aside 
+      @handleScroll="handleScroll"
+      @routerChange="routerChange"
+    ></Aside>
     
     <transition name="slide-fade" mode="out-in">
       <router-view></router-view>
@@ -23,7 +36,9 @@ export default {
      goTopStyle:{
        "right":"-100px"
      },
-     scrollTop:0
+     scrollTop:0,
+     scroll:true,
+     activeIndex:'home'
     }
   },
   components:{
@@ -42,7 +57,13 @@ export default {
           clearInterval(timer)
         }
       }, 16)
-    } 
+    } ,
+    handleScroll(val){
+      this.scroll = val;
+    },
+    routerChange(val){
+      this.activeIndex = val
+    }
   },
   mounted(){
     let _THIS = this;

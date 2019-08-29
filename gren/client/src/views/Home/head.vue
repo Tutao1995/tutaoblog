@@ -1,7 +1,21 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: Tutao
+ * @Date: 2019-07-19 09:45:35
+ * @LastEditDate: Do not edit
+ -->
 <template>
-    <div class="header position-re">
+    <div class="header position-re" v-show="headShow">
       <div class="header-left position-ab" @click="toggleClick" :style="headerLeftStyle">
         <div class="header-left-item" :style="headerLeftItemStyle" v-for="i in 9"  :key="i" ></div>
+      </div>
+      <div class="small-routers" v-show="liFlag">
+        <ul>
+          <li @click="smallLi('home')"><i class="iconfont icon-shouye1"></i>Home</li>
+          <li @click="smallLi('about')"><i class="iconfont icon-guanyuwo"></i>About</li>
+          <li @click="smallLi('tags')"><i class="iconfont icon-leimupinleifenleileibie2"></i>Tags</li>
+        </ul>
       </div>
       <div class="header-title position-ab">
         <div>Tutao Blog | 前端笔记</div>
@@ -9,13 +23,13 @@
       </div>
       <div class="header-li">
         <router-link to="/blog/home">
-            <div :class="homeClass" class="header-li-item" @click="currentLi('homeClass')"><i class="iconfont icon-shouye1"></i>Home</div>
+            <div :class="home" class="header-li-item" @click="currentLi('home')"><i class="iconfont icon-shouye1"></i>Home</div>
         </router-link>
         <router-link to="/blog/about">
-            <div :class="aboutClass" class="header-li-item" @click="currentLi('aboutClass')"><i class="iconfont icon-guanyuwo"></i>About</div>
+            <div :class="about" class="header-li-item" @click="currentLi('about')"><i class="iconfont icon-guanyuwo"></i>About</div>
         </router-link>
         <router-link to="/blog/tags">
-            <div :class="tagsClass" class="header-li-item" @click="currentLi('tagsClass')"><i class="iconfont icon-leimupinleifenleileibie2"></i>Tags</div>
+            <div :class="tags" class="header-li-item" @click="currentLi('tags')"><i class="iconfont icon-leimupinleifenleileibie2"></i>Tags</div>
         </router-link>
       </div>
     </div>
@@ -31,72 +45,76 @@ export default {
             headerLeftItemStyle:{
                 "margin":"3px"
             },
-            homeClass:{
+            home:{
               "activeLi":false,
             },
-            aboutClass:{
+            about:{
               "activeLi":false,
             },
-            tagsClass:{
+            tags:{
               "activeLi":false,
             },
-            currentLiItem:'homeClass',
+            currentLiItem:'home',
+            liFlag:false,    
         }
     },
-    props:[],
+    props:{
+      headShow:Boolean,
+      activeIndex:String
+    },
+    watch:{
+      activeIndex(){
+        this.currentLi(this.activeIndex)
+      }
+    },
     methods:{
         toggleClick(){
             this.headerLeftStyle.padding = "5px";
             this.headerLeftItemStyle.margin = "1px";
-            
-            //   this.coverStyle = {
-            //      "transform":"translate3d(0,0,0)",
-            //       "opacity":"1", 
-            //       "z-index":"2",
-            //       "width":"100%",
-            //       "height":"100%"
-            //   }
+            this.liFlag = true;
         },
         coverHandle(){
             this.headerLeftStyle.padding = "0px";
             this.headerLeftItemStyle.margin = "2px";
-            //   this.coverStyle = {
-            //      "transform":"translate3d(0,-100,0)",
-            //       "opacity":"0", 
-            //       "z-index":"-1",
-            //       "width":"0",
-            //        "height":"100%"
-            //   }
+        },
+        smallLi(str){
+          this.currentLi(str);
+          this.liFlag = false;
+          this.headerLeftStyle.padding = "0px";
+          this.headerLeftItemStyle.margin = "3px";
+          this.$router.push('/blog/'+str)
         },
         currentLi(str){
-          console.log(this.$store,"this.$store")
           this.currentLiItem = str;
           sessionStorage.setItem("currentClass",str);
           store.dispatch('set_currentClass',str);  
           let _THIS = this;
           switch(str){
-            case 'homeClass':
-              _THIS.homeClass.activeLi = true;
-              _THIS.aboutClass.activeLi = false;
-              _THIS.tagsClass.activeLi = false;
+            case 'home':
+              _THIS.home.activeLi = true;
+              _THIS.about.activeLi = false;
+              _THIS.tags.activeLi = false;
             break;
-            case 'aboutClass':
-              _THIS.homeClass.activeLi = false;
-              _THIS.aboutClass.activeLi = true;
-              _THIS.tagsClass.activeLi = false;
+            case 'about':
+              _THIS.home.activeLi = false;
+              _THIS.about.activeLi = true;
+              _THIS.tags.activeLi = false;
             break;
-            case 'tagsClass':
-              _THIS.homeClass.activeLi = false;
-              _THIS.aboutClass.activeLi = false;
-              _THIS.tagsClass.activeLi = true;
+            case 'tags':
+              _THIS.home.activeLi = false;
+              _THIS.about.activeLi = false;
+              _THIS.tags.activeLi = true;
             break;
           }
         }
     },
     mounted(){
       let curC = sessionStorage.getItem("currentClass");
-      this[curC].activeLi = true;
-    }
+      if(curC){
+        this[curC].activeLi = true;
+      }
+    },
+    
 }
 </script>
 <style lang="less">
@@ -120,7 +138,7 @@ export default {
     height: 4rem;
     background: #111;
     padding:10px;
-    
+    transition:all 1s ease;
     box-shadow: 0 0 5px #111;
     .header-left{
       display: flex;
@@ -140,6 +158,28 @@ export default {
         background: red;
         transition: @allEase
       }
+    }
+    .small-routers{
+      position: fixed;
+      top: 84px;
+      left:0;
+      width: 100%;
+      background: rgba(0,0,0,.5);
+      li{
+        padding: 16px;
+        color: #fff;
+        border-bottom: 1px solid #fff;
+        cursor: pointer;
+        transition:all 1000 ease;
+        i{
+          margin: 0 10px;
+          font-size: 20px;
+        }
+      }
+      li:hover{
+        background: #333;
+      }
+        
     }
     .header-title{
       left: 50%;
@@ -249,12 +289,12 @@ export default {
 @media only screen and (min-width: 328px) and (max-width: 769px) {
   // 区分移动端pc端的样式
     .header{
-    position: fixed !important;
-    width: 100%;
-    z-index: 2;
-    .header-li{
+      position: fixed !important;
+      width: 100%;
+      z-index: 2;
+      .header-li{
         display: @dn;
-        }
+      }
     }
 }
 @media only screen and (min-width: 769px) and (max-width: 1366px) {
@@ -268,6 +308,9 @@ export default {
       }
       .header-title{
         color:#111;
+      }
+      .small-routers{
+        display: block;
       }
     }
 }
@@ -289,6 +332,9 @@ export default {
         -webkit-transform: translate(-50%, -50%);
         font-size: 20px;
       }
+   }
+   .small-routers{
+     display: none;
    }
 }
 </style>
