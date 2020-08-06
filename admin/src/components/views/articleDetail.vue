@@ -158,7 +158,6 @@ export default {
     },
     methods:{
         handleCurrentChange(val){
-            
             this.getData({
                 cur_page:val,
                 pagesize:10,

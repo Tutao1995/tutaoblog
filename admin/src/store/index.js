@@ -68,7 +68,6 @@ const actions = {
             })
             .then( res => {
                 if(res.data.code === 200){
-                    
                     //token存   routers存
                     let token = res.data.token,roles = res.data.data.roles,name = res.data.data.name;
                     console.log(res,"res")

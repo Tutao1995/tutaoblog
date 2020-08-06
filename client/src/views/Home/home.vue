@@ -1,7 +1,8 @@
 
 <template>
     <div class="content">
-      <div class="content-item" v-for="(article,index) in articleList" :key="index">
+      <div class="no-data" v-if="articleList.length === 0">暂无数据</div>
+      <div class="content-item" v-for="(article,index) in articleList" :key="index" v-else>
         <div class="content-item-title">{{article.title}}</div>
         <div class="content-item-other"><i class="el-icon-date"></i><span class="content-item-other-time">{{timeFormat(article.createTime)}}</span>| <i class="el-icon-folder-opened"></i><span class="content-item-other-catogeries">{{catogeriesFormat(article.catogeries)}}</span></div>
         <div class="content-item-description">{{article.description}}</div>
