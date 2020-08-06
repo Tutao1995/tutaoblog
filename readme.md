@@ -1,3 +1,6 @@
+# 内容：admin 后台管理系统   client 客户端   service 后端服务器  
+
+技术栈：后端：node + koa2 + mongooDB     前端：vue + elementUI
 # 1. 标题
 一个#代表几级标题
 
@@ -95,11 +98,4 @@ title可加可不加
 ```
 
 
-# 内容：admin 后台管理系统   client 客户端   service 后端服务器  
 
-技术栈：后端：node + koa2 + mongooDB     前端：vue + elementUI
-
-
-## 部署准备
-
-1.
